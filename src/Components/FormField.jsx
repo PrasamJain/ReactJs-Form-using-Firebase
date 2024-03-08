@@ -14,7 +14,10 @@ const FormField = () => {
     sameAsResidential: false,
     permanentStreet1: "",
     permanentStreet2: "",
+    fileName: "",
+    fileType: "",
     additionalFiles: [{ name: "", type: "" }],
+
   });
 
   const [errors, setErrors] = useState({});
@@ -56,36 +59,19 @@ const FormField = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // const handleAdditionalFileChange = (e, index) => {
-  //   const { name, value } = e.target;
-  //   const updatedAdditionalFiles = [...formData.additionalFiles];
-  //   updatedAdditionalFiles[index] = {
-  //     ...updatedAdditionalFiles[index],
-  //     [name]: value,
-  //   };
-  //   setFormData({
-  //     ...formData,
-  //     additionalFiles: updatedAdditionalFiles,
-  //   });
-  // };
-
-
   const handleAdditionalFileChange = (e, index) => {
-    const { name, value, files } = e.target;
+    const { name, value} = e.target;
     const updatedAdditionalFiles = [...formData.additionalFiles];
-    console.log("type", files);
-    // Update the file name and type fields
-    if (files.length > 0) {
-      updatedAdditionalFiles[index] = {
-        ...updatedAdditionalFiles[index],
-        name: files[0].name,
-        type: files[0].type
-      };
-      setFormData({
-        ...formData,
-        additionalFiles: updatedAdditionalFiles,
-      });
-    }
+    
+    updatedAdditionalFiles[index] = {
+      ...updatedAdditionalFiles[index],
+      [name]: value,
+    };
+    console.log(updatedAdditionalFiles);
+    setFormData({
+      ...formData,
+      additionalFiles: updatedAdditionalFiles,
+    });
   };
 
 
@@ -213,7 +199,7 @@ const FormField = () => {
 
   return (
     <div>
-      <h1>REACT JS MACHINE TEST</h1>
+      <h1>REACT JS FORM USING FIREBASE</h1>
 
       <form className="form" onSubmit={handleSubmit}>
         <div className="form-section row names">
@@ -342,22 +328,27 @@ const FormField = () => {
                     <label>File Name:<span className="mandatory">*</span></label>
                     <input
                       type="text"
-                      name={`fileName${index}`}
-                      value={file.name || ""}
+                      name="fileName"
+                      value={formData.Filename}
                       placeholder="Enter file name"
                       onChange={(e) => handleAdditionalFileChange(e, index)}
                     />
                   </div>
                   <div>
                     <label>Type of File:<span className="mandatory">*</span> </label>
-                    <input
-                      type="text"
-                      name={`fileType${index}`}
-                      value={file.type || ""}
-                      placeholder="Enter type of file"
+                    <select
+                      name="fileType"
+                      value={formData.FileType}
                       onChange={(e) => handleAdditionalFileChange(e, index)}
-                    />
+                      className="custom-select"
+                    >
+                      <option value="">Select type</option>
+                      <option value="PDF">PDF</option>
+                      <option value="JPG">JPG</option>
+                      <option value="JPEG">JPEG</option>
+                    </select>
                   </div>
+
                   <div>
                     <input type="file" name={`fileUpload${index}`} onChange={(e) => handleAdditionalFileChange(e, index)} />
                     {formData.additionalFiles[index].name && ( // Display cancel button only if a file is selected
@@ -394,7 +385,12 @@ const FormField = () => {
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Date Of Birth</th>
-                <th>Addredd</th>
+                <th>Residential Addredd</th>
+                <th>Permanent Addredd</th>
+                <th>File Name</th>
+                <th>File Type</th>
+                <th>upload file</th>
+
                 {/* Add more headers as needed */}
               </tr>
             </thead>
@@ -406,6 +402,10 @@ const FormField = () => {
                   <td>{record.email}</td>
                   <td>{record.birthDate}</td>
                   <td>{record.street1 + " - " + record.street2}</td>
+                  <td>{record.permanentStreet1 + " - " + record.permanentStreet2}</td>
+                  <td>{record.additionalFiles[0].fileName}</td>
+                  <td>{record.additionalFiles[0].fileType}</td>
+                  <td>{record.additionalFiles[0].fileUpload0}</td>
                   {/* Add more table data cells as needed */}
                 </tr>
               ))}
